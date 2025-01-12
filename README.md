@@ -27,7 +27,7 @@ The Train Management System is a simple program written in C++ that allows users
 ### Build Instructions
 1. Clone the repository:
    ```bash
-   git clone https://github.com/<username>/train-management-system.git
+   git clone https://github.com/TechXplorerFR/train-management-system.git
    cd train-management-system
    ```
 
