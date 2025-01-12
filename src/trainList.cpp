@@ -80,9 +80,77 @@ bool TrainList::removeTrain(int travelId)
     return false;
 }
 
+void mergeSort(std::vector<Train> &trains, int lowerB, int upperB)
+{
+    if (lowerB >= upperB)
+    {
+        return;
+    }
+
+    int middle = lowerB + (upperB - lowerB) / 2;
+    mergeSort(trains, lowerB, middle);
+    mergeSort(trains, middle + 1, upperB);
+    mergeArray(trains, lowerB, middle, upperB);
+}
+
+void mergeArray(std::vector<Train> &trains, int lowerB, int middle, int upperB)
+{
+    int sizeLeft = middle - lowerB + 1;
+    int sizeRight = upperB - middle;
+
+    // Create temporary vectors for left and right halves
+    std::vector<Train> leftArray(sizeLeft);
+    std::vector<Train> rightArray(sizeRight);
+
+    // Fill leftArray and rightArray
+    for (int i = 0; i < sizeLeft; i++)
+    {
+        leftArray[i] = trains[lowerB + i];
+    }
+    for (int i = 0; i < sizeRight; i++)
+    {
+        rightArray[i] = trains[middle + 1 + i];
+    }
+
+    int i = 0, j = 0, k = lowerB;
+
+    // Merge the arrays based on the `delay` property
+    while (i < sizeLeft && j < sizeRight)
+    {
+        if (leftArray[i].delay <= rightArray[j].delay)
+        {
+            trains[k] = leftArray[i];
+            i++;
+        }
+        else
+        {
+            trains[k] = rightArray[j];
+            j++;
+        }
+        k++;
+    }
+
+    // Copy any remaining elements from leftArray
+    while (i < sizeLeft)
+    {
+        trains[k] = leftArray[i];
+        i++;
+        k++;
+    }
+
+    // Copy any remaining elements from rightArray
+    while (j < sizeRight)
+    {
+        trains[k] = rightArray[j];
+        j++;
+        k++;
+    }
+}
+
 void TrainList::sortByDelay()
 {
-    std::sort(trains.begin(), trains.end(),
-              [](const Train &a, const Train &b)
-              { return a.delay < b.delay; });
+    if (!trains.empty())
+    {
+        mergeSort(trains, 0, trains.size() - 1);
+    }
 }
